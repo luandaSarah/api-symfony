@@ -3,14 +3,17 @@
 namespace App\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM; 
+use Symfony\Component\Serializer\Attribute\Groups;
 
 //type trait
 trait DateTimeTraits
 {
     #[ORM\Column]
+     #[Groups(['common:index'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+     #[Groups(['common:index'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getCreatedAt(): ?\DateTimeImmutable

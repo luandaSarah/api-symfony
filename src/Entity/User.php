@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\DateTimeTraits;
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use App\Entity\Traits\DateTimeTraits;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
@@ -14,18 +15,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use DateTimeTraits; //tout ce qui se trouve dans mon trait DateTimeTrait se retrouve dans la class User
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['common:index'])] //ici on permet au groupe common:index de voir  d'acceder à l'id
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['common:index'])]
     private ?string $username = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['users:index'])]
     private array $roles = [];
 
     /**
@@ -40,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastName = null;
 
-    
+
 
     public function getId(): ?int
     {
@@ -139,5 +144,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    
+    #[Groups('users:index')] //on peut assi le mettre sur une methode, ca sera afficher en format json aussi 
+    public function getFullName(): string
+    {
+        return "$this->firstName $this->lastName";
+    }
 }
