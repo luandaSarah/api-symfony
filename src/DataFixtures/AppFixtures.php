@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Article;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -42,7 +43,20 @@ class AppFixtures extends Fixture
 
         $manager->persist($user);
 
+
         for ($i = 0; $i <= 15; $i++) {
+            $article = new Article();
+            $article
+                ->setTitle("article $i")
+                ->setContent("C'est le contenu de l'article $i")
+                ->setShortContent("Preview de $i")
+                ->setEnable(true)
+                ->setUSer($user);
+
+            $manager->persist($article);
+        }
+
+        for ($i = 1; $i <= 15; $i++) {
             $user = new User;
             $user
                 ->setUsername($this->faker->unique()->userName())
@@ -57,6 +71,7 @@ class AppFixtures extends Fixture
 
             $manager->persist($user);
         }
+
         $manager->flush();
     }
 }

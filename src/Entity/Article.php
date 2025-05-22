@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\DateTimeTraits;
-use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Traits\DateTimeTraits;
+use App\Repository\ArticleRepository;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Gedmo\Mapping\Annotation as Gedmo; //on importe le bundle Gedmo pour l'automatisation des slug;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
@@ -21,16 +22,20 @@ class Article
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['articles:index'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Gedmo\Slug(fields:['title'])] //Automatisation du slug
+    #[Groups(['articles:index'])]
+    #[Gedmo\Slug(fields: ['title'])] //Automatisation du slug
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['articles:index'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['articles:index'])]
     private ?string $shortContent = null;
 
     #[ORM\Column]
@@ -49,6 +54,7 @@ class Article
     {
         return $this->title;
     }
+
 
     public function setTitle(string $title): static
     {
@@ -115,5 +121,11 @@ class Article
         $this->user = $user;
 
         return $this;
+    }
+
+    #[Groups(['articles:index'])]
+    public function getOwnerFullName(): string
+    {
+        return $this->user->getFullName();
     }
 }

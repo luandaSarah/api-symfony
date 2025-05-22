@@ -44,7 +44,7 @@ class UserController extends AbstractController
             $user,
             Response::HTTP_OK,
             context:[
-                'groups'=> ['common:index', 'user:index', 'users:show'],
+                'groups'=> ['common:index', 'users:index', 'users:show'],
             ]
         );
     }
