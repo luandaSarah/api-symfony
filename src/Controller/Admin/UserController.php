@@ -20,7 +20,7 @@ class UserController extends AbstractController
     public function __construct(
         private EntityManagerInterface $em,
         private UserRepository $userRepository,
-        private readonly UserMapper $userMapper,
+        private readonly UserMapper $userMapper, //les data ne peuvent etre modifier à ce moement là
     ) {}
 
     #[Route('', name: 'index', methods: ['GET'])]
@@ -77,7 +77,7 @@ class UserController extends AbstractController
 
         return $this->json(
             null,
-            Response::HTTP_NO_CONTENT,
+            Response::HTTP_NO_CONTENT
         );
     }
 }

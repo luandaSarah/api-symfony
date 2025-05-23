@@ -19,30 +19,34 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['common:index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['articles:index'])]
+    #[Groups(['articles:index', 'articles:show'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['articles:index'])]
+    #[Groups(['articles:index', 'articles:show'])]
     #[Gedmo\Slug(fields: ['title'])] //Automatisation du slug
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['articles:index'])]
+    #[Groups(['articles:show'])]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['articles:index'])]
+    #[Groups(['articles:index', 'articles:show'])]
     private ?string $shortContent = null;
 
     #[ORM\Column]
+    #[Groups(['articles:index', 'articles:show'])]
     private ?bool $enable = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['articles:index'])]
+
     private ?User $user = null;
 
     public function getId(): ?int
@@ -123,9 +127,4 @@ class Article
         return $this;
     }
 
-    #[Groups(['articles:index'])]
-    public function getOwnerFullName(): string
-    {
-        return $this->user->getFullName();
-    }
 }

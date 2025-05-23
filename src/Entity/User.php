@@ -159,11 +159,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    #[Groups(['users:index'])] //on peut assi le mettre sur une methode getter, ca sera renvoyer en format json aussi 
+    #[Groups(['users:index', 'articles:index', 'articles:show'])] //on peut assi le mettre sur une methode getter, ca sera renvoyer en format json aussi 
     public function getFullName(): string
     {
         return "$this->firstName $this->lastName";
     }
+
+   
 
     /**
      * @return Collection<int, Article>
@@ -194,4 +196,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+   
 }
