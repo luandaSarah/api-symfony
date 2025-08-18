@@ -7,7 +7,7 @@ class ArticleFilterDto
 {
     public function __construct(
     private readonly int $page = 1,
-    private readonly int $limit = 6,
+    private readonly int $limit = 10,
     ){
         
     }

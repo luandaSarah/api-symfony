@@ -44,7 +44,6 @@ security:
     #Tout utilisateurs à access à cette route, elle est publique
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
     # si l'user n'est pas admin en accedant à cette route, alors il fera fasse à une erreur 401
-    - { path: ^/api/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

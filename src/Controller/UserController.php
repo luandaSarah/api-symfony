@@ -19,6 +19,7 @@ class UserController extends AbstractController
         private readonly EntityManagerInterface $em, //les data ne peuvent etre modifier à ce moement là
     ) {}
 
+  
     #[Route('api/register', name: 'api_register', methods: ['POST'])]
     public function register(
         // !WARNING: OLD CODE
@@ -40,7 +41,7 @@ class UserController extends AbstractController
         // );
         //!END OLD CODE 
 
-        #[MapRequestPayload] 
+        #[MapRequestPayload]
         //Attribut php 8 qui fonctionne quà partir de symfony 6.3, fait tout ce qu'il ya dans le OLD CODE 
         //il indique à symfony d'utiliser la deserialisation pour transformer le contenue requête en JSON en objet RegisterUserDto $dto   
         RegisterUserDto $dto
