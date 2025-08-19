@@ -111,7 +111,7 @@ class ArticleEntityTest extends KernelTestCase
         $this->databaseTool->loadAliceFixture(
             [
                 \dirname(__DIR__) . '/Fixtures/ArticleFixtures.yaml'
-                ]
+            ]
         );
 
         $article = $this->getArticle()
@@ -120,5 +120,22 @@ class ArticleEntityTest extends KernelTestCase
         $this->expectException(UniqueConstraintViolationException::class);
 
         $this->persistData($article, $article->getUser());
+    }
+
+
+    public function testGenerationUpdatedAtOnUpdateAndEnsureUpdatedIsChanged(): void
+    {
+        $article = $this->getArticle();
+
+        $this->persistData($article, $article->getUser());
+
+        $updatedAt = new \DateTimeImmutable('2025-01-01 12:00');
+
+        $article
+            ->setUpdatedAt($updatedAt);
+
+        $this->entityManager->flush();
+
+        $this->assertNotEquals($updatedAt, $article->getUpdatedAt());
     }
 }
