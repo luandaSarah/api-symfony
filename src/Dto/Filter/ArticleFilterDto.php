@@ -1,16 +1,19 @@
-<?php 
+<?php
 
 namespace App\Dto\Filter;
 
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ArticleFilterDto
 {
     public function __construct(
-    private readonly int $page = 1,
-    private readonly int $limit = 10,
-    ){
-        
-    }
+
+        #[Assert\Positive]
+        private readonly int $page = 1,
+
+        #[Assert\Positive]
+        private readonly int $limit = 10,
+    ) {}
 
     /**
      * Get the value of page

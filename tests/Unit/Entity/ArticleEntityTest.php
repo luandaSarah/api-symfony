@@ -9,10 +9,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+//kernelTestCase est une classe de test de Symfony 
+//qui permet de tester les entités et les services dans un environnement 
+//contrôlé differe de TestCase qui ne marchera pas avec Symfony car ne dépends que de PHPUnit
 
 class ArticleEntityTest extends KernelTestCase
-{
 
+{
     private EntityManagerInterface $entityManager;
 
     private AbstractDatabaseTool $databaseTool; // Permet de gérer les fixtures et la base de données, il provient de LiipTestFixturesBundle
