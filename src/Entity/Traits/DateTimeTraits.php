@@ -2,18 +2,18 @@
 
 namespace App\Entity\Traits;
 
-use Doctrine\ORM\Mapping as ORM; 
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 //type trait
 trait DateTimeTraits
 {
     #[ORM\Column]
-     #[Groups(['common:index'])]
+    #[Groups(['common:index'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-     #[Groups(['common:index'])]
+    #[Groups(['common:index'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -42,9 +42,9 @@ trait DateTimeTraits
 
 
     #[ORM\PrePersist]  //permet d'inserer la date de creation auto avant la persistance en bdd
-    public function autoSetCreatedAt(): static 
+    public function autoSetCreatedAt(): static
     {
-        if(!$this->createdAt) {
+        if (!$this->createdAt) {
             $this->createdAt = new \DateTimeImmutable();
         }
 
@@ -53,11 +53,9 @@ trait DateTimeTraits
 
 
     #[ORM\PreUpdate]  //permet d'inserer la date de maj auto avant la modification en bdd
-    public function autoSetUpdatedAt(): static 
+    public function autoSetUpdatedAt(): static
     {
-        if(!$this->updatedAt) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
+        $this->updatedAt = new \DateTimeImmutable();
 
         return $this;
     }
