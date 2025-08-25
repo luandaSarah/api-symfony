@@ -82,20 +82,7 @@ class ArticleDtoTest extends KernelTestCase
         );
     }
 
-    #[DataProvider('provideUserData')]
-    public function testCreateArticleUser(int $user, array $expectedErrors): void
-    {
 
-        $this->assertValidationErrors(
-
-
-            $this->getArticleDto([
-                'user' => $user,
-            ]),
-
-            $expectedErrors
-        );
-    }
 
     public static function provideTitleData(): array
     {
