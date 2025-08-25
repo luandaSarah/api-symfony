@@ -1,38 +1,53 @@
-name: Full Process CI
+name: Full Process CI #nom de l'action
 
-on:
-    push:
-        branches-ignore:
-            - "dependabot/**"
+on: #à chaque 
+  push: 
+    branches-ignore: #sauf pour
+      - "dependabot/**"
 
-jobs:
-    ci:
-        runs-on: ubuntu-latest
-        name: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}
-        strategy:
-            matrix:
-                php: [8.4]
-                symfony: [7.2]
+jobs: #fait 
+  ci:
+    runs-on: ubuntu-latest
+    name: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }}
+    strategy:
+      matrix:
+        php: [8.4]
+        symfony: [7.2]
 
-        steps:
-            - uses: actions/checkout@v4
+    steps: #Etapes :
+      - uses: actions/checkout@v4 #Check le code sources
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: "${{ matrix.php }}"
-                  extensions: intl, mbstring, opcache, pdo_sqlite, apcu, pcov
-                  tools: symfony
-                  ini-values: memory_limit=3G
-                  coverage: pcov
+      - name: Setup PHP #installe php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+          extensions: intl, mbstring, opcache, pdo_sqlite, apcu, pcov
+          tools: symfony
+          ini-values: memory_limit=3G
+          coverage: pcov
 
-            - name: Install composer dependencies
-              run: composer install --no-interaction
+      - name: Validate composer #installe composer
+        run: composer validate
 
-            - name: Run Unit Tests
-              run: php bin/phpunit --testsuite=unit --coverage-clover coverage/cov-unit.xml
+      - name: Install composer dependencies #install les dépendence de php
+        run: composer install --no-interaction
 
-            - name: Run Functional Tests
-              run: php bin/phpunit --testsuite=functional --coverage-clover coverage/cov-functional.xml
+      - name: Check Security issues #verifie les failles de sécurité sur chaque bundle/dépendence
+        run: symfony security:check
 
-            # TODO: Add step for upload to codecov
+      - name: Check ECS review #verifie si le code source contient des erreurs (erreurs de syntaxes, use en trop ect...)
+        run: vendor/bin/ecs check src
+
+      - name: Run Unit Tests #lance les tests unitaires 
+        run: php bin/phpunit --testsuite=unit --coverage-clover coverage/cov-unit.xml
+
+      - name: Run Functional Tests #lance les tests functionnels 
+        run: php bin/phpunit --testsuite=functional --coverage-clover coverage/cov-functional.xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+            token: ${{ secrets.CODECOV_TOKEN }}
+            files: coverage/cov-unit.xml
+            flags: unit
+            name: codecov-umbrella
